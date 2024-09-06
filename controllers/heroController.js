@@ -61,7 +61,7 @@ exports.getData = async (req, res) => {
 
       // Store the complete article text and all hrefs found in the article
       contentArray.push({
-        text,  // The complete text content of the article
+        articleText,  // The complete text content of the article
         hrefs         // All href links found within the article
       });
     }
