@@ -19,10 +19,10 @@ exports.getData = async (req, res) => {
   }
 
   // Validate that the page is an integer
-  const pageNumber = parseInt(page, 10);
-  if (isNaN(pageNumber)) {
-    return res.status(400).json({ error: 'Invalid page number' });
-  }
+  //const pageNumber = parseInt(page, 10);
+  //if (isNaN(pageNumber)) {
+    //return res.status(400).json({ error: 'Invalid page number' });
+  //}
 
   try {
     const bridge = new TransportBridge();
