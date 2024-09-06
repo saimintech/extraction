@@ -1,16 +1,11 @@
 const express = require('express');
-const Hero = require('@ulixee/hero');
-const HeroCore = require('@ulixee/hero-core');
-const { TransportBridge } = require('@ulixee/net');
-const { ConnectionToHeroCore } = require('@ulixee/hero');
-
 const app = express();
 const port = process.env.PORT || 3000;
+const apiRoutes = require('./routes/api');
 
 app.use(express.json());
 
-// Import and use routes
-const apiRoutes = require('./routes/api');
+// Use routes
 app.use('/api', apiRoutes);
 
 app.listen(port, () => {
