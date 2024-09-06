@@ -71,7 +71,7 @@ exports.getData = async (req, res) => {
       title,
       tag,
       results: contentArray,
-      page: pageNumber
+      //page: pageNumber
     });
 
     await hero.close();
