@@ -4,11 +4,11 @@ const { TransportBridge } = require('@ulixee/net');
 const { ConnectionToHeroCore } = require('@ulixee/hero');
 
 exports.getData = async (req, res) => {
-  const { url, number, tag } = req.query;
+  const { url, page, tag } = req.query;
 
   // Validate parameters
-  if (!url || !number || !tag) {
-    return res.status(400).json({ error: 'Missing url, number, or tag parameter' });
+  if (!url || !tag) {
+    return res.status(400).json({ error: 'Missing url, page, or tag parameter' });
   }
 
   // Validate the URL
@@ -18,10 +18,10 @@ exports.getData = async (req, res) => {
     return res.status(400).json({ error: 'Invalid URL' });
   }
 
-  // Validate that the number is an integer
-  const integer = parseInt(number, 10);
-  if (isNaN(integer)) {
-    return res.status(400).json({ error: 'Invalid number' });
+  // Validate that the page is an integer
+  const pageNumber = parseInt(page, 10);
+  if (isNaN(pageNumber)) {
+    return res.status(400).json({ error: 'Invalid page number' });
   }
 
   try {
@@ -39,19 +39,39 @@ exports.getData = async (req, res) => {
     // Get the title of the page
     const title = await hero.document.title;
 
-    // Find all elements matching the specified tag
-    const elements = await hero.document.querySelectorAll(tag);
+    // Find all articles on the page
+    const articles = await hero.document.querySelectorAll('article');
     const contentArray = [];
-    for (const element of elements) {
-      contentArray.push(await element.textContent);
+
+    for (const article of articles) {
+      let articleText = '';
+      let hrefs = [];
+
+      // Extract the full text content from the article
+      articleText = await article.innerText;
+
+      // Find all <a> tags inside the article and get their href values
+      const anchorTags = await article.querySelectorAll('a');
+      for (const anchor of anchorTags) {
+        const href = await anchor.getAttribute('href');
+        if (href) {
+          hrefs.push(href);
+        }
+      }
+
+      // Store the complete article text and all hrefs found in the article
+      contentArray.push({
+        text,  // The complete text content of the article
+        hrefs         // All href links found within the article
+      });
     }
 
-    // Respond with the page title, the content of the matched tags, and the integer
+    // Respond with the page title, article content, hrefs, and the page number
     res.json({
       title,
       tag,
-      matchingElements: contentArray,
-      number: integer
+      results: contentArray,
+      page: pageNumber
     });
 
     await hero.close();
