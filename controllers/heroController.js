@@ -59,14 +59,16 @@ exports.getData = async (req, res) => {
         }
       }
 
+      // Ensure all hrefs are unique
+      hrefs = [...new Set(hrefs)];
+      
       // Store the complete article text and all hrefs found in the article
       contentArray.push({
         articleText,  // The complete text content of the article
         hrefs         // All href links found within the article
       });
     }
-    // Ensure all hrefs are unique
-    hrefs = [...new Set(hrefs)];
+    
     
     // Respond with the page title, article content, hrefs, and the page number
     res.json({
