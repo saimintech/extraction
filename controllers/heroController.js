@@ -40,7 +40,7 @@ exports.getData = async (req, res) => {
     const title = await hero.document.title;
 
     // Find all articles on the page
-    const articles = await hero.document.querySelectorAll('article');
+    const articles = await hero.document.querySelectorAll(tag);
     const contentArray = [];
 
     for (const article of articles) {
