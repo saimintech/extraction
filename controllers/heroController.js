@@ -65,7 +65,9 @@ exports.getData = async (req, res) => {
         hrefs         // All href links found within the article
       });
     }
-
+    // Ensure all hrefs are unique
+    hrefs = [...new Set(hrefs)];
+    
     // Respond with the page title, article content, hrefs, and the page number
     res.json({
       title,
